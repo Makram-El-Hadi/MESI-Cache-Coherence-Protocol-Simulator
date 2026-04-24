@@ -1,6 +1,6 @@
 class bus:
 
-  def _init_(self, caches, memory, stats):
+  def __init__(self, caches, memory, stats):
 
     self.caches = caches
     self.memory = memory
@@ -24,7 +24,7 @@ class bus:
         
         shared = True
         
-      return shared
+    return shared
 
   def issue_bus_rdx(self, core_requester_id, address):
 
