@@ -1,5 +1,5 @@
 from Cache import Cache
-from Bus import bus
+from Bus import Bus
 from Memory import Memory
 from Stats import Stats
 
