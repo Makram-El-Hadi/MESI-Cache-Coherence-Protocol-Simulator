@@ -1,5 +1,5 @@
 class Cache:
-    def __init__(self, core_id, num_lines=8):
+    def __init__(self, core_id, stats, num_lines=8):#changed
         self.core_id = core_id
         # State mapping: {index: {'tag': tag, 'state': state}}
         # Initial state is 'I' (Invalid)
@@ -7,7 +7,8 @@ class Cache:
         self.num_lines = num_lines
         
         # Stats tracking
-        self.stats = {'rd_hit': 0, 'rd_miss': 0, 'wr_hit': 0, 'wr_miss': 0, 'silent_upgrades': 0}
+        #self.stats = {'rd_hit': 0, 'rd_miss': 0, 'wr_hit': 0, 'wr_miss': 0, 'silent_upgrades': 0}
+        self.stats=stats #changed
 
     def _get_index_tag(self, address):
         index = address % self.num_lines
@@ -20,11 +21,13 @@ class Cache:
 
         # PrRd Hit: State is M, E, or S and tag matches
         if line['tag'] == tag and line['state'] != 'I':
-            self.stats['rd_hit'] += 1
+            #self.stats['rd_hit'] += 1
+            self.stats.log_rd_hit(self.core_id) # Real-time push
             return f"Read Hit (State: {line['state']})"
 
         # PrRd Miss: Issue BusRd
-        self.stats['rd_miss'] += 1
+        #self.stats['rd_miss'] += 1
+        self.stats.log_rd_miss(self.core_id) # Real-time push
         
         # Check if line is Modified before evicting
         if line['state'] == 'M':
@@ -44,12 +47,14 @@ class Cache:
 
         # 1. Check for Write Hit
         if line['tag'] == tag and line['state'] != 'I':
-            self.stats['wr_hit'] += 1
+            #self.stats['wr_hit'] += 1
+            self.stats.log_wr_hit(self.core_id) # Real-time push
             
             # MESI SPECIAL CASE: Silent Upgrade
             if line['state'] == 'E': 
                 line['state'] = 'M'
-                self.stats['silent_upgrades'] += 1 # Required metric for Experiment 4
+                #self.stats['silent_upgrades'] += 1 # Required metric for Experiment 4
+                self.stats.log_silent_upgrade() # Real-time push
                 return "Silent Upgrade: E -> M"
                 
             # If in S, we must invalidate others before writing
@@ -61,7 +66,8 @@ class Cache:
             return "Write Hit: Stay in M"
 
         # 2. Write Miss Logic
-        self.stats['wr_miss'] += 1
+        #self.stats['wr_miss'] += 1 
+        self.stats.log_wr_miss(self.core_id) # Real-time push
         
         # Eviction: If current line is Modified, write it back first
         if line['state'] == 'M':
@@ -82,7 +88,7 @@ class Cache:
         if line['tag'] == tag and line['state'] != 'I':
             if bus_op == 'BusRd':
                 # If we are M, we must write back and move to S
-                if line['state'] == 'M':
+                if line['state'] == 'M':  
                     line['state'] = 'S'
                     return "Flush" # Signal to bus that we had data
                 line['state'] = 'S' # Stay in S if already S or E
