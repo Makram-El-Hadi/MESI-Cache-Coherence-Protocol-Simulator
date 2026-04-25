@@ -4,14 +4,14 @@ from Memory import Memory
 from Stats import Stats
 
 def main():
-    num_cores = 4
+    num_cores = 8
 
     stats = Stats(num_cores)
     memory = Memory(1024)
 
     caches = []
 
-    system_bus = bus(caches, memory, stats)
+    system_bus = Bus(caches, memory, stats)
 
     for core_id in range(num_cores):
         caches.append(Cache(core_id))
