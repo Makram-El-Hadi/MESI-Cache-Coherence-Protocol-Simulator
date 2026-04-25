@@ -1,4 +1,4 @@
-class bus:
+class Bus:
 
   def __init__(self, caches, memory, stats):
 
