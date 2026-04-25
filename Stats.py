@@ -23,27 +23,42 @@ class Stats:
         # MESI-specific metric
         self.silent_upgrades = 0
 
-    # Invalidation tracking (used in Bus.py)
-    def record_invalidation_received(self, core_id):
+    # Cache logging functions
+    def log_rd_hit(self, core_id):
+        self.read_hits[core_id] += 1
+
+    def log_rd_miss(self, core_id):
+        self.read_misses[core_id] += 1
+
+    def log_wr_hit(self, core_id):
+        self.write_hits[core_id] += 1
+
+    def log_wr_miss(self, core_id):
+        self.write_misses[core_id] += 1
+
+    def log_silent_upgrade(self):
+        self.silent_upgrades += 1
+
+    # Bus logging functions
+    def log_BusRd(self):
+        self.bus_transactions["BusRd"] += 1
+
+    def log_BusRdX(self):
+        self.bus_transactions["BusRdX"] += 1
+
+    def log_BusUpgr(self):
+        self.bus_transactions["BusUpgr"] += 1
+
+    def log_BusWB(self):
+        self.bus_transactions["BusWB"] += 1
+
+
+    # Invalidation logging
+    def log_invalidation_received(self, core_id):
         self.invalidations_received[core_id] += 1
 
-    def record_invalidation_caused(self, core_id):
+    def log_invalidation_caused(self, core_id):
         self.invalidations_caused[core_id] += 1
-
-    # Collect stats from caches
-    # IMPORTANT: call this AFTER simulation
-    def collect_cache_stats(self, caches): # Each cashe already tracks: rd_hit, rd_miss, wr_hit, wr_miss, silent_upgrades
-        self.silent_upgrades = 0
-        
-        for cache in caches: # Now we copy them into global stats.
-            cid = cache.core_id
-
-            self.read_hits[cid] = cache.stats.get("rd_hit", 0)
-            self.read_misses[cid] = cache.stats.get("rd_miss", 0)
-            self.write_hits[cid] = cache.stats.get("wr_hit", 0)
-            self.write_misses[cid] = cache.stats.get("wr_miss", 0)
-
-            self.silent_upgrades += cache.stats.get("silent_upgrades", 0)
 
     # Global totals
     def total_read_hits(self):
@@ -68,12 +83,10 @@ class Stats:
         return sum(self.bus_transactions.values())
 
     def total_accesses(self):
-        return (
-            self.total_read_hits()
-            + self.total_read_misses()
-            + self.total_write_hits()
-            + self.total_write_misses()
-        )
+        return self.total_hits() + self.total_misses()
+    
+    def total_hits(self):
+        return self.total_read_hits() + self.total_write_hits()
 
     def total_misses(self):
         return self.total_read_misses() + self.total_write_misses()
@@ -81,8 +94,8 @@ class Stats:
     def hit_rate(self):
         if self.total_accesses() == 0:
             return 0
-        return (self.total_read_hits() + self.total_write_hits()) / self.total_accesses()
-
+        return self.total_hits() / self.total_accesses()
+    
     def miss_rate(self):
         if self.total_accesses() == 0:
             return 0
@@ -93,15 +106,15 @@ class Stats:
         print("\n==================== STATS SUMMARY ====================")
 
         print("\nPer-core statistics:")
-        for cid in range(self.num_cores):
+        for i in range(self.num_cores):
             print(
-                f"Core {cid}: "
-                f"RH={self.read_hits[cid]}, "
-                f"RM={self.read_misses[cid]}, "
-                f"WH={self.write_hits[cid]}, "
-                f"WM={self.write_misses[cid]}, "
-                f"InvRecv={self.invalidations_received[cid]}, "
-                f"InvCause={self.invalidations_caused[cid]}"
+                f"Core {i}: "
+                f"RH={self.read_hits[i]}, "
+                f"RM={self.read_misses[i]}, "
+                f"WH={self.write_hits[i]}, "
+                f"WM={self.write_misses[i]}, "
+                f"InvRecv={self.invalidations_received[i]}, "
+                f"InvCause={self.invalidations_caused[i]}"
             )
 
         print("\nGlobal statistics:")
@@ -109,8 +122,9 @@ class Stats:
         print(f"Total read misses: {self.total_read_misses()}")
         print(f"Total write hits: {self.total_write_hits()}")
         print(f"Total write misses: {self.total_write_misses()}")
-        print(f"Total accesses: {self.total_accesses()}")
+        print(f"Total Hits: {self.total_hits()}")
         print(f"Total misses: {self.total_misses()}")
+        print(f"Total accesses: {self.total_accesses()}")
         print(f"Hit rate: {self.hit_rate():.4f}")
         print(f"Miss rate: {self.miss_rate():.4f}")
 
