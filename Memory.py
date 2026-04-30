@@ -14,7 +14,7 @@ class Memory:
     def read(self, address):
       
       self.check_address_validity(address)
-      return None # we don't care what the value is so we always return 0
+      return None # we don't care what the value is so we always return None
 
     def write_back(self, address):
         
