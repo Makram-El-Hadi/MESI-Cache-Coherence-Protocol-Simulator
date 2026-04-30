@@ -3,7 +3,7 @@ class Cache:
     def __init__(self, core_id, stats, num_lines=8, is_MESI=True):
         
         self.core_id = core_id
-        self.lines = {i : {'tag': None, 'state': 'I'} for i in range(num_lines)} # Initialize cache lines with 'I' state
+        self.lines = {i : {'tag': None, 'state': 'I'} for i in range(num_lines)} # Initialize cache lines with I state
         self.num_lines = num_lines
         self.is_MESI=is_MESI #switch between MESI and MSI
         self.stats=stats 
