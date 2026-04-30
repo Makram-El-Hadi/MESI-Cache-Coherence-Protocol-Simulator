@@ -14,16 +14,8 @@ class Memory:
     def read(self, address):
       
       self.check_address_validity(address)
-      data_from_mem = self.data[address] # read the data from the memory and then return it 
+      return None # we don't care what the value is so we always return 0
 
-      return data_from_mem
-    
-    def write(self, address, value):
+    def write_back(self, address):
         
-        self.check_address_validity(address)
-        self.data[address] = value # set the data inside memory of that specific address to value
-
-    def write_back(self, address, value):
-        
-        self.write(address, value)
-        
+        self.check_address_validity(address) # we do not need to make a write function because we have a write_back cache and not a write_through cache, so we only have write_back occuring from caches.
