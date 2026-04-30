@@ -22,6 +22,8 @@ def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, is_mesi=Tru
 
     # 3. Execute the trace operations[cite: 4]
     for core_id, operation, address in trace_data:
+        if core_id >= num_cores:
+            continue
         if operation == "R":
             caches[core_id].processor_read(address, system_bus)
         elif operation == "W":
