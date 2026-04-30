@@ -63,8 +63,8 @@ class Bus:
         self.stats.log_invalidation_received(cache.core_id) # record that this cache received an invalidation
         self.stats.log_invalidation_caused(core_requester_id) # record that the requester caused an invalidation
   
-  def issue_bus_wb(self, address, value=0):
+  def issue_bus_wb(self, address):
       
       # self.stats.bus_transactions['BusWB'] += 1
       self.stats.log_BusWB() # Global count not per core
-      self.memory.write_back(address, value) # tells the memory to write back to that address (no need to tell the other caches of this operation)
+      self.memory.write_back(address) # tells the memory to write back to that address (no need to tell the other caches of this operation)
