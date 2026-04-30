@@ -10,7 +10,7 @@ trace_a = [
     (3, 'R', 24), (3, 'R', 25),
 ]
 
-trace_b = [
+trace_b = [ #shouldn't this write be W R W R or W W W W R R R R instead of W R R R W R R R 
     (0, 'W', 0), (1, 'R', 0), (2, 'R', 0), (3, 'R', 0),
     (0, 'W', 1), (1, 'R', 1), (2, 'R', 1), (3, 'R', 1),
     (0, 'W', 2), (1, 'R', 2), (2, 'R', 2), (3, 'R', 2),
