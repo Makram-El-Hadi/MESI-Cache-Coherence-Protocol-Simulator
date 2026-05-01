@@ -103,38 +103,34 @@ class Stats:
 
     # Simple prints to see nicer
     def print_summary(self):
-        print("\n==================== STATS SUMMARY ====================")
+        print("\n Stats Summary: ")
 
         print("\nPer-core statistics:")
         for i in range(self.num_cores):
-            print(
-                f"Core {i}: "
-                f"RH={self.read_hits[i]}, "
-                f"RM={self.read_misses[i]}, "
-                f"WH={self.write_hits[i]}, "
-                f"WM={self.write_misses[i]}, "
-                f"InvRecv={self.invalidations_received[i]}, "
-                f"InvCause={self.invalidations_caused[i]}"
-            )
+            print("Core " + str(i) + ": "
+                + "RH=" + str(self.read_hits[i]) + ", "
+                + "RM=" + str(self.read_misses[i]) + ", "
+                + "WH=" + str(self.write_hits[i]) + ", "
+                + "WM=" + str(self.write_misses[i]) + ", "
+                + "InvRecv=" + str(self.invalidations_received[i]) + ", "
+                + "InvCause=" + str(self.invalidations_caused[i]))
 
         print("\nGlobal statistics:")
-        print(f"Total read hits: {self.total_read_hits()}")
-        print(f"Total read misses: {self.total_read_misses()}")
-        print(f"Total write hits: {self.total_write_hits()}")
-        print(f"Total write misses: {self.total_write_misses()}")
-        print(f"Total Hits: {self.total_hits()}")
-        print(f"Total misses: {self.total_misses()}")
-        print(f"Total accesses: {self.total_accesses()}")
-        print(f"Hit rate: {self.hit_rate():.4f}")
-        print(f"Miss rate: {self.miss_rate():.4f}")
+        print("Total read hits: " + str(self.total_read_hits()))
+        print("Total read misses: " + str(self.total_read_misses()))
+        print("Total write hits: " + str(self.total_write_hits()))
+        print("Total write misses: " + str(self.total_write_misses()))
+        print("Total Hits: " + str(self.total_hits()))
+        print("Total misses: " + str(self.total_misses()))
+        print("Total accesses: " + str(self.total_accesses()))
+        print("Hit rate: " + str(round(self.hit_rate(), 4)))
+        print("Miss rate: " + str(round(self.miss_rate(), 4)))
 
         print("\nBus transactions:")
-        for name, count in self.bus_transactions.items():
-            print(f"{name}: {count}")
+        for name in self.bus_transactions:
+            print(name + ": " + str(self.bus_transactions[name]))
 
-        print(f"Total bus transactions: {self.total_bus_transactions()}")
-        print(f"Silent upgrades: {self.silent_upgrades}")
-        print(f"Total invalidations received: {self.total_invalidations_received()}")
-        print(f"Total invalidations caused: {self.total_invalidations_caused()}")
-
-        print("=======================================================\n")
+        print("Total bus transactions: " + str(self.total_bus_transactions()))
+        print("Silent upgrades: " + str(self.silent_upgrades))
+        print("Total invalidations received: " + str(self.total_invalidations_received()))
+        print("Total invalidations caused: " + str(self.total_invalidations_caused()))
