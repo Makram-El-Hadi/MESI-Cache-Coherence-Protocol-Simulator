@@ -5,8 +5,8 @@ from Stats import Stats
 
 def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, is_mesi=True):
     
-    print(f"\n>>> Running Experiment: {trace_name}")
-    print(f"Configuration: Cores={num_cores}, Lines={num_lines}, Protocol={'MESI' if is_mesi else 'MSI'}")
+    print(f"\nRunning: {trace_name}")
+    print(f"Cores={num_cores}, Lines={num_lines}, Protocol={'MESI' if is_mesi else 'MSI'}\n")
 
     # creating new instances
     stats = Stats(num_cores)
@@ -30,7 +30,7 @@ def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, is_mesi=Tru
 
 def interleave_traces(trace1, trace2): #don't know if we need this??????
     """
-    Merges two traces to simulate simultaneous execution on the bus[cite: 1, 8].
+    Merges two traces to simulate simultaneous execution on the bus
     """
     merged = []
     len1, len2 = len(trace1), len(trace2)
