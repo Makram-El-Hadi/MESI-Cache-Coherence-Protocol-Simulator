@@ -3,7 +3,6 @@ class Memory:
     def __init__(self, size):
         
         self.size = size  # initialize the memory system aligned with the size of memory chosen
-        self.data = [0] * size
 
     def check_address_validity(self, address):
         
