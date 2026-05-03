@@ -1,6 +1,6 @@
 class Memory:
 
-    def __init__(self, size):
+    def __init__(self, size = 64):
         
         self.size = size  # initialize the memory system aligned with the size of memory chosen
 
