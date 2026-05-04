@@ -8,6 +8,11 @@ trace_a = [
     (1, 'R', 8), (1, 'R', 9),
     (2, 'R', 16), (2, 'R', 17),
     (3, 'R', 24), (3, 'R', 25),
+
+    (0, 'W', 0),
+    (1, 'W', 8),
+    (2, 'W', 16),
+    (3, 'W', 24),
 ]
 
 trace_b = [ #shouldn't this write be W R W R or W W W W R R R R instead of W R R R W R R R 
