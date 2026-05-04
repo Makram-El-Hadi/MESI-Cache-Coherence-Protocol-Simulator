@@ -19,11 +19,5 @@ def main():
     run_simulation("Exp4_Trace_A", Traces.trace_a, num_cores=4, num_lines=8, is_mesi=True)
     run_simulation("Exp4_Trace_A", Traces.trace_a, num_cores=4, num_lines=8, is_mesi=False)
 
-    # --- Professor's Special Request: Simultaneous Traces ---
-    # This isn't in the handout but handles the "running at the same time" question.
-    print("\nEXECUTING SIMULTANEOUS TRACE TEST:")
-    sim_trace = interleave_traces(Traces.trace_a, Traces.trace_b)
-    run_simulation("Simultaneous_A_and_B", sim_trace, num_cores=4, num_lines=8, is_mesi=True)
-
 if __name__ == "__main__":
     main()
