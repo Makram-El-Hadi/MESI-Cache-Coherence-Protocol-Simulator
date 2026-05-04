@@ -10,7 +10,7 @@ def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, is_mesi=Tru
 
     # creating new instances
     stats = Stats(num_cores)
-    memory = Memory(1024) 
+    memory = Memory(64) 
     caches = []
     system_bus = Bus(caches, memory, stats)
 
