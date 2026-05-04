@@ -12,7 +12,7 @@ class Stats:
         self.invalidations_received = [0] * num_cores
         self.invalidations_caused = [0] * num_cores
 
-        # Bus transactions (used directly by Bus.py)
+        # Bus transactions 
         self.bus_transactions = {
             "BusRd": 0,
             "BusRdX": 0,
