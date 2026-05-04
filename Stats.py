@@ -103,19 +103,19 @@ class Stats:
 
     # Simple prints to see nicer
     def print_summary(self):
-        print("\n Stats Summary: ")
+        print("\nStats Summary: ")
 
-        print("\nPer-core statistics:")
+        print("\nPer-core statistics:\n")
         for i in range(self.num_cores):
             print("Core " + str(i) + ": "
-                + "RH=" + str(self.read_hits[i]) + ", "
-                + "RM=" + str(self.read_misses[i]) + ", "
-                + "WH=" + str(self.write_hits[i]) + ", "
-                + "WM=" + str(self.write_misses[i]) + ", "
-                + "InvRecv=" + str(self.invalidations_received[i]) + ", "
-                + "InvCause=" + str(self.invalidations_caused[i]))
+                + "Read Hits=" + str(self.read_hits[i]) + ", "
+                + "Read Misses=" + str(self.read_misses[i]) + ", "
+                + "Write Hits=" + str(self.write_hits[i]) + ", "
+                + "Write Misses=" + str(self.write_misses[i]) + ", "
+                + "Invalidations Received=" + str(self.invalidations_received[i]) + ", "
+                + "Invalidations Caused=" + str(self.invalidations_caused[i]))
 
-        print("\nGlobal statistics:")
+        print("\nGlobal statistics:\n")
         print("Total read hits: " + str(self.total_read_hits()))
         print("Total read misses: " + str(self.total_read_misses()))
         print("Total write hits: " + str(self.total_write_hits()))
@@ -126,7 +126,7 @@ class Stats:
         print("Hit rate: " + str(round(self.hit_rate(), 4)))
         print("Miss rate: " + str(round(self.miss_rate(), 4)))
 
-        print("\nBus transactions:")
+        print("\nBus transactions:\n")
         for name in self.bus_transactions:
             print(name + ": " + str(self.bus_transactions[name]))
 
