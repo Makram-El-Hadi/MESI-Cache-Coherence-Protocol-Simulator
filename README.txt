@@ -16,7 +16,7 @@ The simulator models:
 - Multiple processor cores.
 - A private direct-mapped cache for each core.
 - A shared bus used for snooping coherence transactions.
-- A simple main memory model.
+- A main memory model.
 - Workload traces for testing coherence behavior.
 - Statistics collection for hits, misses, invalidations, bus transactions, and silent upgrades.
 
@@ -42,10 +42,9 @@ Files Included
    - Implements the shared bus.
    - Broadcasts BusRd, BusRdX, BusUpgr, and BusWB operations.
    - Notifies all other caches during snooping.
-   - Records bus transactions and invalidations.
 
 5. "Memory.py"
-   - Implements a simple memory model.
+   - Implements the memory model.
    - Checks address validity.
    - Accepts writebacks from caches.
 
@@ -77,13 +76,11 @@ Running the Simulator
    - "Stats.py"
    - "Traces.py"
 
-3. Open a terminal in the project directory.
-
-4. Run:
+3. Run:
 
    "python main.py"
 
-5. The program will execute:
+4. The program will execute:
    - Experiment 1: Baseline protocol behavior.
    - Experiment 2: Effect of number of cores.
    - Experiment 3: Effect of cache size.
@@ -99,6 +96,7 @@ Experiments
 - Uses the default configuration:
   - "N = 4" cores.
   - "C = 8" cache lines.
+  - "M = 64" memory size
   - MESI protocol enabled.
 - Reports:
   - Read hits and misses.
@@ -116,6 +114,7 @@ Experiments
   - "N = 6"
   - "N = 8"
 - Cache size remains fixed at "C = 8".
+- Memory size remains "M = 64".
 - Reports how bus traffic changes as more cores are added.
 
 ### 3. Experiment 3: Effect of Cache Size
@@ -127,6 +126,7 @@ Experiments
   - "C = 16"
   - "C = 32"
 - Number of cores remains fixed at "N = 4".
+- Memory size remains "M = 64".
 - Reports the effect of cache size on miss rate and bus traffic.
 
 ### 4. Experiment 4: Silent Upgrade Analysis
@@ -135,7 +135,7 @@ Experiments
   - once using MESI behavior.
   - once using MSI-equivalent behavior.
 - Compares the number of bus transactions.
-- Shows the effect of MESI silent upgrades from Exclusive to Modified.
+- Shows the effect of MESI silent upgrades.
 
 
 Output
@@ -172,66 +172,7 @@ For each simulation, the program prints:
   - Total invalidations received.
   - Total invalidations caused.
 
-
-Commands & Detailed Workflow
-----------------------------
-
-### 1. Run All Experiments
-
-- Open terminal in the project directory.
-- Run:
-
-  "python main.py"
-
-- The program automatically runs all four experiments.
-- No additional input is required.
-
-### 2. Modify Trace A, B, or C
-
-- Open "Traces.py".
-- Edit the trace lists directly.
-- Each trace entry must follow the format:
-
-  "(core_id, operation, address)"
-
-- "operation" must be:
-  - "'R'" for read.
-  - "'W'" for write.
-
-### 3. Modify Number of Cores
-
-- Open "main.py".
-- Change the "num_cores" value in the corresponding experiment call.
-
-Example:
-
-"run_simulation("Experiment_2_Trace_B", Traces.trace_b, num_cores=4, num_lines=8, is_mesi=True)"
-
-### 4. Modify Cache Size
-
-- Open "main.py".
-- Change the "num_lines" value in the corresponding experiment call.
-
-Example:
-
-"run_simulation("Experiment_3_Trace_C", Traces.trace_c, num_cores=4, num_lines=16, is_mesi=True)"
-
-### 5. Switch Between MESI and MSI-Equivalent Behavior
-
-- In "main.py", set:
-
-  "is_mesi=True"
-
-  for MESI behavior.
-
-- Set:
-
-  "is_mesi=False"
-
-  for MSI-equivalent behavior.
-
-
-Notes
+Notes:
 -----
 
 - The simulator does not model actual data values.
