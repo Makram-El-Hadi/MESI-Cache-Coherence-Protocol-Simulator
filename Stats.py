@@ -108,12 +108,12 @@ class Stats:
         print("\nPer-core statistics:\n")
         for i in range(self.num_cores):
             print("Core " + str(i) + ": "
-                + "Read Hits=" + str(self.read_hits[i]) + ", "
-                + "Read Misses=" + str(self.read_misses[i]) + ", "
-                + "Write Hits=" + str(self.write_hits[i]) + ", "
-                + "Write Misses=" + str(self.write_misses[i]) + ", "
-                + "Invalidations Received=" + str(self.invalidations_received[i]) + ", "
-                + "Invalidations Caused=" + str(self.invalidations_caused[i]))
+                + "Read Hits = " + str(self.read_hits[i]) + ", "
+                + "Read Misses = " + str(self.read_misses[i]) + ", "
+                + "Write Hits = " + str(self.write_hits[i]) + ", "
+                + "Write Misses = " + str(self.write_misses[i]) + ", "
+                + "Invalidations Received = " + str(self.invalidations_received[i]) + ", "
+                + "Invalidations Caused = " + str(self.invalidations_caused[i]))
 
         print("\nGlobal statistics:\n")
         print("Total read hits: " + str(self.total_read_hits()))
