@@ -74,7 +74,7 @@ class Cache:
         return "Write Miss: -> M"
 
     def snoop(self, bus_op, address): #does not affect stats
-        """React to other cores' bus traffic"""
+        #React to other cores' bus traffic
         index, tag = self._get_index_tag(address)
         line = self.lines[index]
 
