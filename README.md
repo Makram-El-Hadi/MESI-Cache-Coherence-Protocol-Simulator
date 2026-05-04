@@ -1,132 +1,241 @@
-# EECE422-Project
+# EECE422 Snooping Cache Coherence Simulator
+
+## Contributors
+
+1. Bassam Yaacoub
+2. Hussein Kharroubi  
+3. Makram El Hadi
 
 
+Project Description
+-------------------
 
-================================================================================
-  Project 1: Snooping Cache Coherence Simulator
-  EECE 422 — Parallel Computer Architecture, Spring 2026
-  American University of Beirut
-================================================================================
+This project implements a snooping cache coherence simulator in Python for EECE 422 Parallel Computer Architecture. 
 
-GROUP MEMBERS
--------------
-  [Student Name 1] — [ID]
-  [Student Name 2] — [ID]
-  [Student Name 3] — [ID]
-
-
---------------------------------------------------------------------------------
-REQUIREMENTS
---------------------------------------------------------------------------------
-
-  - Python 3.7 or later (no third-party packages required)
-  - All source files must be in the same directory
+The simulator models:
+- Multiple processor cores.
+- A private direct-mapped cache for each core.
+- A shared bus used for snooping coherence transactions.
+- A simple main memory model.
+- Workload traces for testing coherence behavior.
+- Statistics collection for hits, misses, invalidations, bus transactions, and silent upgrades.
 
 
---------------------------------------------------------------------------------
-FILE OVERVIEW
---------------------------------------------------------------------------------
+Files Included
+--------------
 
-  main.py           Entry point. Runs all five experiments in sequence.
-  Experiments.py    run_simulation() and interleave_traces() helpers.
-  Cache.py          MESI/MSI cache with processor_read, processor_write, snoop.
-  Bus.py            Shared bus: BusRd, BusRdX, BusUpgr, BusWB.
-  Memory.py         Flat address-space memory with write-back support.
-  Stats.py          Per-core and global statistics collection and printing.
-  Traces.py         Definitions of Trace A, B, and C as Python lists.
+1. `main.py`
+   - Runs all required experiments.
 
+2. `Experiments.py`
+   - Contains the simulation runner.
+   - Creates the caches, bus, memory, and stats objects.
+   - Executes each trace operation in order.
 
---------------------------------------------------------------------------------
-HOW TO RUN
---------------------------------------------------------------------------------
+3. `Cache.py`
+   - Implements the private cache for each core.
+   - Handles processor reads and writes.
+   - Implements MESI state transitions.
+   - Handles snooping responses to bus transactions.
 
-  Run all experiments at once:
+4. `Bus.py`
+   - Implements the shared bus.
+   - Broadcasts BusRd, BusRdX, BusUpgr, and BusWB operations.
+   - Notifies all other caches during snooping.
+   - Records bus transactions and invalidations.
 
-      python main.py
+5. `Memory.py`
+   - Implements a simple memory model.
+   - Checks address validity.
+   - Accepts writebacks from caches.
 
-  This will print results for all five experiments to standard output.
+6. `Stats.py`
+   - Tracks all required statistics.
+   - Records read hits, read misses, write hits, write misses.
+   - Records bus transactions.
+   - Records invalidations and silent upgrades.
+   - Prints the final results for each experiment.
 
-  To run a single custom simulation from a Python shell or script:
-
-      from Experiments import run_simulation
-      import Traces
-
-      run_simulation(
-          trace_name = "MyRun",
-          trace_data = Traces.trace_a,
-          num_cores  = 4,       # number of processor cores (default: 4)
-          num_lines  = 8,       # cache lines per cache (default: 8)
-          is_mesi    = True     # True = MESI protocol, False = MSI protocol
-      )
-
-
---------------------------------------------------------------------------------
-REPRODUCING EACH EXPERIMENT
---------------------------------------------------------------------------------
-
-  All experiments are executed automatically by running:
-
-      python main.py
-
-  Below is a description of what each experiment does:
-
-  Experiment 1 — Baseline Protocol Behavior
-    Runs Traces A, B, and C with the default configuration:
-      N = 4 cores, C = 8 cache lines, MESI protocol.
-    Reports all statistics (hits, misses, bus transactions, invalidations,
-    silent upgrades) for each trace.
-
-  Experiment 2 — Effect of Number of Cores
-    Runs Trace B (Producer-Consumer) with N in {2, 4, 6, 8},
-    keeping C = 8 and MESI enabled.
-    Shows how total bus transactions scale with core count.
-
-  Experiment 3 — Effect of Cache Size
-    Runs Trace C (Migratory Sharing) with C in {4, 8, 16, 32},
-    keeping N = 4 and MESI enabled.
-    Shows the relationship between cache capacity and coherence traffic.
-
-  Experiment 4 — MESI vs. MSI Silent Upgrade Analysis
-    Runs Trace A twice with N=4, C=8:
-      - Once with MESI (is_mesi=True)
-      - Once with MSI  (is_mesi=False)
-    Quantifies the bus traffic reduction from the Exclusive state.
-
-  Experiment 5 — Simultaneous Trace Execution (A || B)
-    Interleaves Trace A and Trace B in strict round-robin order using
-    interleave_traces(), then runs the merged trace with N=8, C=8, MESI.
-    Also runs each trace alone (Trace A with N=4, Trace B with N=8) as
-    baselines for comparison.
-    Demonstrates emergent coherence behavior (silent upgrades, conflict
-    misses) that appears only when both workloads share the bus.
+7. `Traces.py`
+   - Contains the fixed workload traces:
+     - Trace A: Read-dominated private access.
+     - Trace B: Producer-consumer sharing.
+     - Trace C: Migratory sharing.
 
 
---------------------------------------------------------------------------------
-PROTOCOL SWITCH
---------------------------------------------------------------------------------
+Running the Simulator
+---------------------
 
-  To switch between MESI and MSI, pass is_mesi=True or is_mesi=False to
-  run_simulation(). The Cache class uses this flag to decide whether to use
-  the Exclusive state. All other logic (invalidations, writebacks) is shared.
+1. Copy all Python files into the same working directory.
+
+2. Make sure the following files are present:
+   - `main.py`
+   - `Experiments.py`
+   - `Cache.py`
+   - `Bus.py`
+   - `Memory.py`
+   - `Stats.py`
+   - `Traces.py`
+
+3. Open a terminal in the project directory.
+
+4. Run:
+
+   `python main.py`
+
+5. The program will execute:
+   - Experiment 1: Baseline protocol behavior.
+   - Experiment 2: Effect of number of cores.
+   - Experiment 3: Effect of cache size.
+   - Experiment 4: Silent upgrade analysis.
 
 
---------------------------------------------------------------------------------
-NOTES
---------------------------------------------------------------------------------
+Experiments
+-----------
 
-  - The simulator processes trace events sequentially (one at a time) in the
-    order they appear in the trace list. Bus transactions are atomic: all
-    caches snoop and respond before the next trace event is processed.
+### 1. Experiment 1: Baseline Protocol Behavior
 
-  - The interleave_traces() function merges two traces in strict round-robin
-    order. This models one possible bus arbitration outcome for simultaneous
-    execution; it does not model all possible interleavings.
+- Runs Trace A, Trace B, and Trace C.
+- Uses the default configuration:
+  - `N = 4` cores.
+  - `C = 8` cache lines.
+  - MESI protocol enabled.
+- Reports:
+  - Read hits and misses.
+  - Write hits and misses.
+  - Bus transactions.
+  - Invalidations.
+  - Silent upgrades.
 
-  - Memory size defaults to 1024 addresses, which is larger than any address
-    used in the provided traces. It can be changed in Experiments.py if needed.
+### 2. Experiment 2: Effect of Number of Cores
 
-  - Trace events with a core_id >= num_cores are silently skipped. This allows
-    traces designed for more cores (e.g., Trace B with cores 0-7) to be run
-    with fewer cores without errors.
+- Runs Trace B while varying the number of cores.
+- Core counts used:
+  - `N = 2`
+  - `N = 4`
+  - `N = 6`
+  - `N = 8`
+- Cache size remains fixed at `C = 8`.
+- Reports how bus traffic changes as more cores are added.
 
-================================================================================
+### 3. Experiment 3: Effect of Cache Size
+
+- Runs Trace C while varying cache size.
+- Cache sizes used:
+  - `C = 4`
+  - `C = 8`
+  - `C = 16`
+  - `C = 32`
+- Number of cores remains fixed at `N = 4`.
+- Reports the effect of cache size on miss rate and bus traffic.
+
+### 4. Experiment 4: Silent Upgrade Analysis
+
+- Runs Trace A twice:
+  - once using MESI behavior.
+  - once using MSI-equivalent behavior.
+- Compares the number of bus transactions.
+- Shows the effect of MESI silent upgrades from Exclusive to Modified.
+
+
+Output
+------
+
+For each simulation, the program prints:
+
+- Per-core statistics:
+  - Read hits.
+  - Read misses.
+  - Write hits.
+  - Write misses.
+  - Invalidations received.
+  - Invalidations caused.
+
+- Global statistics:
+  - Total read hits.
+  - Total read misses.
+  - Total write hits.
+  - Total write misses.
+  - Total hits.
+  - Total misses.
+  - Total accesses.
+  - Hit rate.
+  - Miss rate.
+
+- Bus transactions:
+  - BusRd.
+  - BusRdX.
+  - BusUpgr.
+  - BusWB.
+  - Total bus transactions.
+  - Silent upgrades.
+  - Total invalidations received.
+  - Total invalidations caused.
+
+
+Commands & Detailed Workflow
+----------------------------
+
+### 1. Run All Experiments
+
+- Open terminal in the project directory.
+- Run:
+
+  `python main.py`
+
+- The program automatically runs all four experiments.
+- No additional input is required.
+
+### 2. Modify Trace A, B, or C
+
+- Open `Traces.py`.
+- Edit the trace lists directly.
+- Each trace entry must follow the format:
+
+  `(core_id, operation, address)`
+
+- `operation` must be:
+  - `'R'` for read.
+  - `'W'` for write.
+
+### 3. Modify Number of Cores
+
+- Open `main.py`.
+- Change the `num_cores` value in the corresponding experiment call.
+
+Example:
+
+`run_simulation("Experiment_2_Trace_B", Traces.trace_b, num_cores=4, num_lines=8, is_mesi=True)`
+
+### 4. Modify Cache Size
+
+- Open `main.py`.
+- Change the `num_lines` value in the corresponding experiment call.
+
+Example:
+
+`run_simulation("Experiment_3_Trace_C", Traces.trace_c, num_cores=4, num_lines=16, is_mesi=True)`
+
+### 5. Switch Between MESI and MSI-Equivalent Behavior
+
+- In `main.py`, set:
+
+  `is_mesi=True`
+
+  for MESI behavior.
+
+- Set:
+
+  `is_mesi=False`
+
+  for MSI-equivalent behavior.
+
+
+Notes
+-----
+
+- The simulator does not model actual data values.
+- The memory only checks address validity and accepts writebacks.
+- The bus is treated as atomic, meaning one transaction happens at a time.
+- All traces are processed in order.
+- The project focuses on cache coherence state transitions and statistics, not timing or pipelining.
