@@ -18,6 +18,10 @@ def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, memory=64, 
 
     # running the trace
     for core_id, operation, address in trace_data:
+
+        if address > memory:
+            print("Address not in memory address space!")
+            continue
         if core_id >= num_cores: # avoids out of range error if trace has more cores than we are simulating
             continue
         if operation == "R":
