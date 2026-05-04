@@ -9,7 +9,6 @@ class Bus:
 
   def issue_bus_rd(self, core_requester_id, address):
 
-    # self.stats.bus_transactions['BusRd'] += 1 # recheck this and what the record is after the stats file is done
     self.stats.log_BusRd() 
 
     shared = False
@@ -34,7 +33,6 @@ class Bus:
 
   def issue_bus_rdx(self, core_requester_id, address):
 
-      #self.stats.bus_transactions['BusRdX'] += 1
       self.stats.log_BusRdX()
 
       for cache in self.caches:
@@ -49,7 +47,6 @@ class Bus:
   
   def issue_bus_upgr(self, core_requester_id, address):
 
-    # self.stats.bus_transactions['BusUpgr'] += 1
     self.stats.log_BusUpgr()
 
     for cache in self.caches:
@@ -65,6 +62,5 @@ class Bus:
   
   def issue_bus_wb(self, address):
       
-      # self.stats.bus_transactions['BusWB'] += 1
       self.stats.log_BusWB() # Global count not per core
       self.memory.write_back(address) # tells the memory to write back to that address (no need to tell the other caches of this operation)
