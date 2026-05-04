@@ -3,14 +3,13 @@ from Bus import Bus
 from Memory import Memory
 from Stats import Stats
 
-def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, is_mesi=True):
+def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, memory=64, is_mesi=True):
     
     print(f"\nRunning: {trace_name}")
     print(f"Cores = {num_cores}, Lines = {num_lines}, Protocol = {'MESI' if is_mesi else 'MSI'}\n")
 
     # creating new instances
     stats = Stats(num_cores)
-    memory = Memory(64) 
     caches = []
     system_bus = Bus(caches, memory, stats)
 
