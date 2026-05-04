@@ -1,5 +1,5 @@
 import Traces
-from Experiments import run_simulation, interleave_traces
+from Experiments import run_simulation
 
 def main():
     # Experiment 1
