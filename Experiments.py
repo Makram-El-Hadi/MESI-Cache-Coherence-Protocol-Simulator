@@ -6,7 +6,7 @@ from Stats import Stats
 def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, is_mesi=True):
     
     print(f"\nRunning: {trace_name}")
-    print(f"Cores={num_cores}, Lines={num_lines}, Protocol={'MESI' if is_mesi else 'MSI'}\n")
+    print(f"Cores = {num_cores}, Lines = {num_lines}, Protocol = {'MESI' if is_mesi else 'MSI'}\n")
 
     # creating new instances
     stats = Stats(num_cores)
