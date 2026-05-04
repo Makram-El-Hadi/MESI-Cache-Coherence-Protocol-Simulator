@@ -1,6 +1,6 @@
 # EECE422 Snooping Cache Coherence Simulator
 
-## Contributors
+## Project Members
 
 1. Bassam Yaacoub
 2. Hussein Kharroubi  
