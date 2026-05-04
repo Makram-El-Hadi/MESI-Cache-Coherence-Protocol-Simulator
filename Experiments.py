@@ -27,16 +27,3 @@ def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, is_mesi=Tru
             caches[core_id].processor_write(address, system_bus)
 
     stats.print_summary() # print the results
-
-def interleave_traces(trace1, trace2): #don't know if we need this??????
-    """
-    Merges two traces to simulate simultaneous execution on the bus
-    """
-    merged = []
-    len1, len2 = len(trace1), len(trace2)
-    for i in range(max(len1, len2)):
-        if i < len1:
-            merged.append(trace1[i])
-        if i < len2:
-            merged.append(trace2[i])
-    return merged
