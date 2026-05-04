@@ -11,7 +11,8 @@ def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, memory=64, 
     # creating new instances
     stats = Stats(num_cores)
     caches = []
-    system_bus = Bus(caches, memory, stats)
+    memory_inst = Memory(memory)
+    system_bus = Bus(caches, memory_inst, stats)
 
     for core_id in range(num_cores): # building caches for each core
         caches.append(Cache(core_id, stats, num_lines=num_lines, is_MESI=is_mesi))
@@ -19,7 +20,7 @@ def run_simulation(trace_name, trace_data, num_cores=4, num_lines=8, memory=64, 
     # running the trace
     for core_id, operation, address in trace_data:
 
-        if address > memory:
+        if address > memory: # avoids out of range error if trace has addresses outside of memory size
             print("Address not in memory address space!")
             continue
         if core_id >= num_cores: # avoids out of range error if trace has more cores than we are simulating
